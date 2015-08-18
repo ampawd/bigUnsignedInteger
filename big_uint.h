@@ -9,18 +9,18 @@
 #ifndef _BIG_UINT
 #define _BIG_UINT
 
-
-#include <vector>
-#include <string>
+#include <iostream>
 #include <fstream>
+#include <string>
+#include <iomanip>
 #include <cassert>
 
 
 namespace _BIG_UINT_AG
 {
-	#define MAX_SIZE 150
+	#define MAX_SIZE 500
 	#define BASE 1000000000
-	#define digit_size 9				
+	#define DIGIT_SIZE 9				
 	#define BASE_TYPE_MAX_LENGTH 18
 	#define _THRESHOLD 50
 

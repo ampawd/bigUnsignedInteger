@@ -1,18 +1,11 @@
 #include <iostream>
 #include "big_uint.h"
-#include <time.h>
-
-
 
 int main()
 {
-	clock_t start = clock();	
-	_BIG_UINT_AG::Big_uint a, b;
-	std::cin >> a >> b;
-	std::cout << a + b;
+	_BIG_UINT_AG::Big_uint a="10000000000000000000000000000000000000000000000000000000000000000000000001",
+						   b="20000000000000000000000000000000000000000000000000000000000000000000000003";
 	
-
-	std::cout << '\n' << "run time = ";
-	std::cout << (double) (clock() - start) / CLOCKS_PER_SEC;
+	std::cout << (a + b) / 2 << '\n';
 	return 0;
 }

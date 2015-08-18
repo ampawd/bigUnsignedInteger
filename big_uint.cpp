@@ -5,9 +5,9 @@ namespace _BIG_UINT_AG
 	void Big_uint::read_num_str(std::string& num_str)
 	{
 		int l = num_str.length(), pos = 0, start;
-		for (int i = 0; i < l; i += digit_size)
+		for (int i = 0; i < l; i += DIGIT_SIZE)
 		{		
-			start = l-i-digit_size;
+			start = l-i-DIGIT_SIZE;
 			if (start < 0)
 				start = 0;
 			number[pos++] = atoi(num_str.substr(start, l-start-i).c_str());
@@ -90,11 +90,11 @@ namespace _BIG_UINT_AG
 		{
 			std::string as="", bs="", cs="", ds="";
 	
-			as = x.num_str_ptr.substr(0, n - digit_size <= 0 ? 0 : n - digit_size);
-			bs = x.num_str_ptr.substr(n - digit_size <= 0 ? 0 : n - digit_size, n);
+			as = x.num_str_ptr.substr(0, n - DIGIT_SIZE <= 0 ? 0 : n - DIGIT_SIZE);
+			bs = x.num_str_ptr.substr(n - DIGIT_SIZE <= 0 ? 0 : n - DIGIT_SIZE, n);
 
-			cs = y.num_str_ptr.substr(0, m - digit_size <= 0 ? 0 : m - digit_size);
-			ds = y.num_str_ptr.substr(m - digit_size <= 0 ? 0 : m - digit_size, m);
+			cs = y.num_str_ptr.substr(0, m - DIGIT_SIZE <= 0 ? 0 : m - DIGIT_SIZE);
+			ds = y.num_str_ptr.substr(m - DIGIT_SIZE <= 0 ? 0 : m - DIGIT_SIZE, m);
 
 			Big_uint a = as.empty() ? "0" : as, 
 					b = bs.empty() ? "0" : bs,
@@ -299,8 +299,11 @@ namespace _BIG_UINT_AG
 
 	std::ostream& operator << (std::ostream& os, const Big_uint& n)
 	{
-		for (int i = (int)n.length-1; i >= 0; i--)
-			os << n.number[i];
+		os << n.number[n.length-1];
+		for (int i = (int)n.length-2; i >= 0; i--)
+		{
+			os << std::setw(DIGIT_SIZE) << std::setfill('0') << n.number[i];
+		}
 		return os;
 	}
 
@@ -329,7 +332,7 @@ namespace _BIG_UINT_AG
 	{
 		printf("%lld", number[length-1]);
 		for (int j = length - 2; j >= 0; j--)
-			printf("%0*lld", digit_size, number[j]);
+			printf("%0*lld", DIGIT_SIZE, number[j]);
 	}
 
 };
