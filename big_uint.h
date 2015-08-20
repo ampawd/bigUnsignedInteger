@@ -18,7 +18,7 @@
 
 namespace _BIG_UINT_AG
 {
-	#define MAX_SIZE 500
+	#define MAX_SIZE 2000
 	#define BASE 1000000000
 	#define DIGIT_SIZE 9				
 	#define BASE_TYPE_MAX_LENGTH 18
@@ -44,6 +44,15 @@ namespace _BIG_UINT_AG
 			friend Big_uint operator + (const Big_uint&, const Big_uint&);		
 			friend Big_uint operator - (const Big_uint&, const Big_uint&);
 
+			friend Big_uint& operator += (Big_uint&, const Big_uint&);		
+			friend Big_uint& operator -= (Big_uint&, const Big_uint&);
+
+			Big_uint& operator ++ ();		
+			Big_uint& operator -- ();
+
+			Big_uint operator ++ (int);		
+			Big_uint operator -- (int);
+
 			friend Big_uint karatsuba_mul(Big_uint&, Big_uint&);
 			friend Big_uint operator * (const Big_uint&, const Big_uint&);
 			friend Big_uint operator * (const Big_uint&, const bui_digit&);
@@ -52,7 +61,8 @@ namespace _BIG_UINT_AG
 			friend Big_uint operator / (const Big_uint&, const Big_uint&);
 
 			friend bool operator < (const Big_uint&, const Big_uint&);
-			friend bool operator > (const Big_uint&, const Big_uint&); 
+			friend bool operator > (const Big_uint&, const Big_uint&);
+
 			friend bool operator == (const Big_uint&, const Big_uint&); 
 			friend bool operator != (const Big_uint&, const Big_uint&); 
 			friend bool operator <= (const Big_uint&, const Big_uint&); 
@@ -65,8 +75,8 @@ namespace _BIG_UINT_AG
 			Big_uint sqrt_2();
 			size_t length;
 
-			void print(std::ofstream&);
-			void print();
+			void print(std::ofstream&);	//	ouput to a file
+			void print();				//	output to standtard stream
 	};
 
 };

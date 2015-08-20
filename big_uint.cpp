@@ -75,6 +75,45 @@ namespace _BIG_UINT_AG
 		return res;
 	}
 
+	Big_uint& operator += (Big_uint& left, const Big_uint& right) 
+	{
+		left = left + right;
+		return left;
+	}
+
+	Big_uint& operator -= (Big_uint& left, const Big_uint& right)
+	{
+		assert(left >= right);
+		left = left - right;
+		return left;
+	}
+
+	Big_uint& Big_uint::operator ++ ()
+	{
+		*this = *this + 1;
+		return *this;
+	}	
+
+	Big_uint& Big_uint::operator -- ()
+	{
+		assert(*this > 0);
+		*this = *this - 1;
+		return *this;
+	}
+
+	Big_uint Big_uint::operator ++ (int)
+	{
+		Big_uint t = *this;
+		++*this;
+		return t;
+	}
+
+	Big_uint Big_uint::operator -- (int)
+	{
+		Big_uint t = *this;
+		--*this;
+		return t;
+	}
 
 	//	untested
 	Big_uint karatsuba_mul(Big_uint& x, Big_uint& y) 
@@ -302,7 +341,9 @@ namespace _BIG_UINT_AG
 		os << n.number[n.length-1];
 		for (int i = (int)n.length-2; i >= 0; i--)
 		{
-			os << std::setw(DIGIT_SIZE) << std::setfill('0') << n.number[i];
+			os << std::setw(DIGIT_SIZE) 
+			   << std::setfill('0')
+			   << n.number[i];
 		}
 		return os;
 	}
