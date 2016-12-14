@@ -185,7 +185,7 @@ namespace _BIG_UINT_AG
 	// left >= right
 	Big_uint operator / (const Big_uint& left, const bui_digit& right)
 	{
-		assert(left >= right);
+		//assert(left >= right);
 		if (right == 0)
 			throw std::overflow_error("division by zero");
 	
@@ -306,7 +306,7 @@ namespace _BIG_UINT_AG
 		return number[at];
 	}
 
-	Big_uint Big_uint::sqrt_1()
+	Big_uint Big_uint::sqrt_newthon()
 	{
 		Big_uint xn = *this/2;
 		Big_uint xn1 = (xn + *this/xn) / 2;
@@ -318,22 +318,37 @@ namespace _BIG_UINT_AG
 		return xn1;
 	}
 
-	Big_uint Big_uint::sqrt_2()
+	Big_uint Big_uint::sqrt_bin()
 	{
 		Big_uint lo("1"), hi = *this, mid;
-		while ( lo <= hi )
+		while (lo <= hi)
 		{
-			mid = lo + (hi - lo) / 2 ;
-			if (*this < mid * mid) 
+			mid = lo + (hi - lo) / 2;
+			if (*this < mid * mid)
 			{
-				hi = mid-1;
-			} 
+				hi = mid - 1;
+			}
 			else
 			{
-				lo = mid+1;
+				lo = mid + 1;
 			}
 		}
-		return lo-1;
+		return lo - 1;
+	}
+
+	Big_uint Big_uint::pow_bin(unsigned long long n)
+	{
+		Big_uint res("1");
+		Big_uint a = *this;
+		while (n)
+		{
+			if (n & 1)
+				res = res * a;
+
+			a = a * a;
+			n >>= 1;
+		}
+		return res;
 	}
 
 	std::ostream& operator << (std::ostream& os, const Big_uint& n)

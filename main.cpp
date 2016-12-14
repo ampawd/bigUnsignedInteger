@@ -3,19 +3,8 @@
 
 int main()
 {
-	//_BIG_UINT_AG::Big_uint a="10000000000000000000000000000000000000000000000000000000000000000000000000",
-	//					   b="20000000000000000000000000000000000000000000000000000000000000000000000000";
-	//
-	//std::cout << (a + b) / 2 << '\n';
-	
-	_BIG_UINT_AG::Big_uint a,
-		b = "";
-
-
-	std::cin >> a >> b;
-
-
-	karatsuba_mul(a, b).print();
-
+	_BIG_UINT_AG::Big_uint a = "2";
+	for (auto i = 2; i <= 350; i++)
+		std::cout << a.pow_bin(i) << '\n';
 	return 0;
 }

@@ -13,6 +13,7 @@
 #include <fstream>
 #include <string>
 #include <iomanip>
+#include <algorithm>
 #include <cassert>
 
 
@@ -71,8 +72,9 @@ namespace _BIG_UINT_AG
 			friend std::ostream& operator << (std::ostream& os, const Big_uint&);
 			friend std::istream& operator >> (std::istream& os, Big_uint&);
 
-			Big_uint sqrt_1();
-			Big_uint sqrt_2();
+			Big_uint sqrt_newthon();
+			Big_uint sqrt_bin();
+			Big_uint pow_bin(unsigned long long);
 			size_t length;
 
 			void print(std::ofstream&);	//	ouput to a file
