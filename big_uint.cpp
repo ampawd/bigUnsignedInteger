@@ -26,7 +26,13 @@ namespace _BIG_UINT_AG
 	{	
 		memset(number, 0, MAX_SIZE*sizeof(bui_digit));
 		char buff[BASE_TYPE_MAX_LENGTH + 1];
-		_itoa_s(static_cast<int>(num), buff, 10);
+
+		#ifdef __linux__
+			snprintf(buff, sizeof(buff), "%lld", num);
+		#elif defined(_WIN32) || defined(WIN32)
+			_itoa_s(static_cast<int>(num), buff, 10);
+		#endif
+
 		std::string s = buff;
 		read_num_str(s);	
 	}
@@ -116,7 +122,7 @@ namespace _BIG_UINT_AG
 	}
 
 	//	untested
-	Big_uint karatsuba_mul(Big_uint& x, Big_uint& y) 
+	Big_uint karatsuba_mul(const Big_uint& x, const Big_uint& y) 
 	{
 		int n = x.num_str_ptr.length(),
 				m = y.num_str_ptr.length();

@@ -16,6 +16,14 @@
 #include <algorithm>
 #include <cassert>
 
+#ifdef __linux__
+	#include <unistd.h>
+	#include <stdlib.h>
+	#include <stdio.h>
+	#include <string.h>
+#endif
+
+
 
 namespace _BIG_UINT_AG
 {
@@ -54,7 +62,7 @@ namespace _BIG_UINT_AG
 			Big_uint operator ++ (int);		
 			Big_uint operator -- (int);
 
-			friend Big_uint karatsuba_mul(Big_uint&, Big_uint&);
+			friend Big_uint karatsuba_mul(const Big_uint&, const Big_uint&);
 			friend Big_uint operator * (const Big_uint&, const Big_uint&);
 			friend Big_uint operator * (const Big_uint&, const bui_digit&);
 
