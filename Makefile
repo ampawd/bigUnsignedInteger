@@ -1,22 +1,22 @@
-CC=g++
+CXX=g++
 
-CFLAGS=-c -Wall -std=c++11
+CXXFLAGS=-c -Wall -std=c++11
 
-PROG=buint
+PROGNAME=buint
 
 OBJS=main.o big_uint.o
 
 
-all: $(PROG)
+all: $(PROGNAME)
 
-$(PROG): $(OBJS)
-	$(CC) $(OBJS) -o $(PROG)
+$(PROGNAME): $(OBJS)
+	$(CXX) $(OBJS) -o $(PROGNAME)
 
 main.o:
-	$(CC) $(CFLAGS) main.cpp
+	$(CXX) $(CXXFLAGS) main.cpp
 
 big_uint.o:
-	$(CC) $(CFLAGS) big_uint.cpp
+	$(CXX) $(CXXFLAGS) big_uint.cpp
 
 clean:
-	rm -rf *.o *.gch $(PROG)
+	rm -rf *.o *.gch $(PROGNAME)
