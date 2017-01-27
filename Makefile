@@ -1,10 +1,10 @@
-CXX=g++
+CXX 		= g++
 
-CXXFLAGS=-c -Wall -std=c++11
+CXXFLAGS	= -c -Wall -std=c++11
 
-PROGNAME=buint
+PROGNAME	= buint
 
-OBJS=main.o big_uint.o
+OBJS		= main.o big_uint.o
 
 
 all: $(PROGNAME)
@@ -17,6 +17,8 @@ main.o:
 
 big_uint.o:
 	$(CXX) $(CXXFLAGS) big_uint.cpp
+
+.PHONY: clean
 
 clean:
 	rm -rf *.o *.gch $(PROGNAME)
