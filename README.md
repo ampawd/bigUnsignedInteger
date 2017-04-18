@@ -1,4 +1,6 @@
-## Basic operations overloaded for large numbers ( > 10^3 digits)
+### Small experimental library to deal with big unsigned integers 
+
+There are basic operations overloaded for numbers with (<= 10^5 digits)
 
 ### building on linux
 
