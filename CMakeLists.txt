@@ -13,9 +13,15 @@ project (bigUnsignedInt)
 include_directories (${CMAKE_SOURCE_DIR}/include)
 
 
+set(HEADER_FILES ${CMAKE_SOURCE_DIR}/include/big_uint.h)
+
+
 # sources
 file(GLOB SOURCES src/*.cpp)
 
 
 # executable
-add_executable (biguint ${SOURCES} main.cpp)
+add_executable (biguint 
+	${SOURCES} main.cpp 
+	${HEADER_FILES}
+)
