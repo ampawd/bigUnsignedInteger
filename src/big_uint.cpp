@@ -1,31 +1,48 @@
 #include "../include/big_uint.h"
 
-namespace _BIG_UINT_AG 
+namespace AG
 {
-	void Big_uint::read_num_str(std::string& num_str)
+	unsigned long Big_uint::BASE = 1000000000;
+	unsigned Big_uint::DIGIT_SIZE = 9;
+	bui_digit Big_uint::T_square = Big_uint::BASE * Big_uint::BASE;
+
+	void Big_uint::initNumSystem(unsigned long base, unsigned dig_size)
 	{
-		int l = num_str.length(), pos = 0, start;
-		for (int i = 0; i < l; i += DIGIT_SIZE)
+		BASE = base;
+		DIGIT_SIZE = dig_size;
+		T_square = BASE * BASE;
+	}
+
+	void Big_uint::reserveDigitsRaw(size_t rawSize)
+	{
+		number.resize( rawSize );
+	}
+
+	void Big_uint::read_num_str(const std::string& num_str)
+	{
+		assert(number.size() > 0);
+		int len = num_str.length(), pos = 0, start;		
+		for (int i = 0; i < len; i += DIGIT_SIZE)
 		{		
-			start = l-i-DIGIT_SIZE;
+			start = len-i-DIGIT_SIZE;
 			if (start < 0)
 				start = 0;
-			number[pos++] = atoi(num_str.substr(start, l-start-i).c_str());
+			number[pos++] = atoi(num_str.substr(start, len-start-i).c_str());
 		}	
 		length = pos;
 		num_str_ptr = num_str;
 	}
 
-	Big_uint::Big_uint(std::string num_str)
+	Big_uint::Big_uint(const std::string& num_str)
 	{
-		memset(number, 0, MAX_SIZE*sizeof(bui_digit));
+		reserveDigitsRaw(100000);
 		read_num_str(num_str);	
 	}
 
 	Big_uint::Big_uint(const bui_digit& num)
-	{	
-		memset(number, 0, MAX_SIZE*sizeof(bui_digit));
-		char buff[BASE_TYPE_MAX_LENGTH + 1];
+	{
+		reserveDigitsRaw(100000);
+		char buff[ BASE_TYPE_MAX_LENGTH ];
 
 		#ifdef __linux__
 			snprintf(buff, sizeof(buff), "%lld", num);
@@ -37,15 +54,22 @@ namespace _BIG_UINT_AG
 		read_num_str(s);	
 	}
 
+	size_t Big_uint::getLength() const
+	{
+		return length;
+	}
+
 	Big_uint operator + (const Big_uint& left, const Big_uint& right)
 	{
 		Big_uint res;
+		//assert(res.length >= left.length + right.length);
+
 		bui_digit carry = 0; size_t i = 0, l = std::max(left.length, right.length);
 		for (i = 0; i < l || carry; i++)
 		{			
 			res[i] = left.number[i] + right.number[i] + carry;
-			carry = res[i] / BASE;
-			res[i] -= BASE*carry;		
+			carry = res[i] / Big_uint::BASE;
+			res[i] -= Big_uint::BASE*carry;		
 		}
 
 		res.length = i;
@@ -63,7 +87,7 @@ namespace _BIG_UINT_AG
 			res[i] = left.number[i] - right.number[i] + carry;
 			if (res[i] < 0)
 			{		
-				res[i] += BASE;
+				res[i] += Big_uint::BASE;
 				carry = -1;
 			}
 			else 
@@ -126,8 +150,9 @@ namespace _BIG_UINT_AG
 	{
 		int n = x.num_str_ptr.length(),
 				m = y.num_str_ptr.length();
+		unsigned DIGIT_SIZE = Big_uint::DIGIT_SIZE;
 
-		if (std::max(n, m) < _THRESHOLD)
+		if (std::max(n, m) < THRESHOLD)
 		{
 			return x * y;
 		}
@@ -150,7 +175,7 @@ namespace _BIG_UINT_AG
 			Big_uint bd = karatsuba_mul(b, d);
 			Big_uint z = karatsuba_mul(a + b, c + d);
 
-			return ac*T_square + T*(z - (ac + bd)) + bd;
+			return ac*Big_uint::T_square + Big_uint::BASE*(z - (ac + bd)) + bd;
 		}
 	}
 
@@ -164,8 +189,8 @@ namespace _BIG_UINT_AG
 			for (j = 0; j < right.length || carry; j++)
 			{			
 				res.number[i+j] += left.number[i] * right.number[j] + carry; 			
-				carry = res.number[i+j] / BASE; 
-				res.number[i+j] -= BASE*carry;
+				carry = res.number[i+j] / Big_uint::BASE;
+				res.number[i+j] -= Big_uint::BASE*carry;
 			}
 		}
 		res.length = left.length + right.length;
@@ -181,8 +206,8 @@ namespace _BIG_UINT_AG
 		for (size_t i = 0; i < left.length || carry; i++, l++)
 		{
 			res[l] = left.number[i] * right + carry;
-			carry = res[l] / BASE;
-			res[l] -= carry*BASE;
+			carry = res[l] / Big_uint::BASE;
+			res[l] -= carry*Big_uint::BASE;
 		}
 		res.length = l;
 		return res;
@@ -201,7 +226,7 @@ namespace _BIG_UINT_AG
 		int i=0;
 		for (i = (int)left.length-1; i >= 0; i--)
 		{
-			left_part = r*BASE + left.number[i];
+			left_part = r*Big_uint::BASE + left.number[i];
 			q = left_part / right;
 			res.number[i] = q;
 			r = left_part - q*right;		
@@ -226,12 +251,12 @@ namespace _BIG_UINT_AG
 	
 		Big_uint res;
 		res.length = left.length;
-		bui_digit mid, q, low = 0, high = BASE;	
+		bui_digit mid, q, low = 0, high = Big_uint::BASE;
 		Big_uint left_part = left, r=0;
 		int i = 0;
-		for (i = (int)left.length-1; i >= 0; --i, q = 0, low = 0, high = BASE)
+		for (i = (int)left.length-1; i >= 0; --i, q = 0, low = 0, high = Big_uint::BASE)
 		{
-			left_part = r*BASE + left.number[i];
+			left_part = r*Big_uint::BASE + left.number[i];
 			while (low <= high)
 			{
 				mid = (low + high) >> 1;
@@ -362,7 +387,7 @@ namespace _BIG_UINT_AG
 		os << n.number[n.length-1];
 		for (int i = (int)n.length-2; i >= 0; i--)
 		{
-			os << std::setw(DIGIT_SIZE) 
+			os << std::setw(Big_uint::DIGIT_SIZE)
 			   << std::setfill('0')
 			   << n.number[i];
 		}
@@ -394,7 +419,7 @@ namespace _BIG_UINT_AG
 	{
 		printf("%lld", number[length-1]);
 		for (int j = length - 2; j >= 0; j--)
-			printf("%0*lld", DIGIT_SIZE, number[j]);
+			printf("%0*lld", Big_uint::DIGIT_SIZE, number[j]);
 	}
 
 };

@@ -13,8 +13,10 @@
 #include <fstream>
 #include <string>
 #include <iomanip>
+#include <vector>
 #include <algorithm>
 #include <cassert>
+
 
 #ifdef __linux__
 	#include <unistd.h>
@@ -24,33 +26,36 @@
 #endif
 
 
-
-namespace _BIG_UINT_AG
+namespace AG
 {
-	#define MAX_SIZE 2000
-	#define BASE 1000000000
-	#define DIGIT_SIZE 9				
-	#define BASE_TYPE_MAX_LENGTH 18
-	#define _THRESHOLD 50
+	#define THRESHOLD 50
+	#define BASE_TYPE_MAX_LENGTH 20
 
 	typedef long long bui_digit;
-
-	static const bui_digit T = BASE;
-	static const bui_digit T_square = T*T;
 
 	class Big_uint
 	{
 		private:
-			bui_digit number[MAX_SIZE];
+			
+			static unsigned long BASE;
+			static unsigned DIGIT_SIZE;
+			static bui_digit T_square;
+
+			std::vector< bui_digit > number;
 			bui_digit& operator [] (size_t);
-			void read_num_str(std::string &);
+			void read_num_str(const std::string&);
 			std::string num_str_ptr;
+			size_t length;
 
 		public:
-			Big_uint(std::string = "");
+			static void initNumSystem(unsigned long = 1000000000UL, unsigned = 9);
+
+			void reserveDigitsRaw(size_t);			//	let user specify size of the number
+
+			Big_uint(const std::string& = "0");
 			Big_uint(const bui_digit&);
 
-			friend Big_uint operator + (const Big_uint&, const Big_uint&);		
+			friend Big_uint operator + (const Big_uint&, const Big_uint&);
 			friend Big_uint operator - (const Big_uint&, const Big_uint&);
 
 			friend Big_uint& operator += (Big_uint&, const Big_uint&);		
@@ -83,7 +88,7 @@ namespace _BIG_UINT_AG
 			Big_uint sqrt_newthon();
 			Big_uint sqrt_bin();
 			Big_uint pow_bin(unsigned long long);
-			size_t length;
+			size_t getLength() const;
 
 			void print(std::ofstream&);	//	ouput to a file
 			void print();				//	output to standtard stream
