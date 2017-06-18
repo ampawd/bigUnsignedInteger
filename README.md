@@ -1,8 +1,6 @@
 ### Small experimental library for big unsigned integers (up to 10^5 decimal digits)
 
-There are basic operations overloaded for large unsigned integers
-2 algorithms implemented to compute square root
-and binary pow
+There are basic operations overloaded for large unsigned integers, 2 algorithms implemented to compute square root, and binary pow
 
 ### building on linux
 
